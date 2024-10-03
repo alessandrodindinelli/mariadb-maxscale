@@ -1,0 +1,55 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    prometheus.io/port: "9104"
+    prometheus.io/scrape: "true"
+  name: mariadb-secondary-0
+  namespace: {{ .Values.maxscale.namespace }}
+spec:
+  clusterIP: None
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+    - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+    - name: mysql
+      port: 3306
+      protocol: TCP
+      targetPort: mysql
+    - name: metrics
+      port: 9104
+      protocol: TCP
+      targetPort: metrics
+  selector:
+    statefulset.kubernetes.io/pod-name: mariadb-secondary-0
+  sessionAffinity: None
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    prometheus.io/port: "9104"
+    prometheus.io/scrape: "true"
+  name: mariadb-primary-0
+  namespace: {{ .Values.maxscale.namespace }}
+spec:
+  clusterIP: None
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+    - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+    - name: mysql
+      port: 3306
+      protocol: TCP
+      targetPort: mysql
+    - name: metrics
+      port: 9104
+      protocol: TCP
+      targetPort: metrics
+  selector:
+    statefulset.kubernetes.io/pod-name: mariadb-primary-0
+  sessionAffinity: None
+  type: ClusterIP

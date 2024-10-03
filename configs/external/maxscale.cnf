@@ -1,0 +1,43 @@
+bash-4.4$ cd /var/lib/maxscale/maxscale.cnf.d
+bash-4.4$ ls
+mariadb-0.cnf  mariadb-1.cnf  mx-monitor.cnf  mx-router-listener.cnf  mx-router.cnf
+
+bash-4.4$ cat mariadb-0.cnf
+[mariadb-0]
+address=mariadb-0-0.mariadb-0-internal.poc-mariadb-maxscale-external.svc.cluster.local
+max_routing_connections=2048
+protocol=MariaDBBackend
+type=server
+
+bash-4.4$ cat mx-monitor.cnf
+[mx-monitor]
+auto_failover=true
+auto_rejoin=true
+enforce_read_only_slaves=true
+enforce_simple_topology=true
+failcount=1
+replication_password=KB8*&NCf8hR#Wu
+replication_user=maxscale-monitor
+module=mariadbmon
+monitor_interval=1000ms
+password=KB8*&NCf8hR#Wu
+servers=mariadb-0,mariadb-1
+type=monitor
+user=maxscale-monitor
+
+bash-4.4$ cat mx-router-listener.cnf
+[mx-router-listener]
+port=3306
+service=mx-router
+type=listener
+
+bash-4.4$ cat mx-router.cnf
+[mx-router]
+max_replication_lag=3000ms
+router_options=master
+enable_root_user=true
+password=Pi$9pzCn@fiT8Z
+router=readconnroute
+type=service
+user=maxscale-server
+targets=mariadb-0,mariadb-1

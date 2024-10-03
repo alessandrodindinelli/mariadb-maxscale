@@ -1,0 +1,16 @@
+apiVersion: k8s.mariadb.com/v1alpha1
+kind: User
+metadata:
+  name: sky-admin-2
+  namespace: poc-mariadb-maxscale-external
+spec:
+  name: sky-admin
+  mariaDbRef:
+    name: mariadb-2
+  passwordSecretKeyRef:
+    name: sky-admin
+    key: password
+  maxUserConnections: 20
+  host: "%"
+  retryInterval: 5s
+  requeueInterval: 60s

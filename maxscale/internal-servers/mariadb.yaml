@@ -1,0 +1,49 @@
+apiVersion: k8s.mariadb.com/v1alpha1
+kind: MariaDB
+metadata:
+  name: mariadb
+  namespace: poc-mariadb-maxscale-internal
+spec:
+  image: mariadb:10.6.9
+  imagePullPolicy: IfNotPresent
+
+  rootPasswordSecretKeyRef:
+    name: mariadb-root-user
+    key: password
+    generate: true
+
+  maxScaleRef:
+    name: maxscale
+
+  username: mariadb
+  passwordSecretKeyRef:
+    name: mariadb-generic-user
+    key: password
+    generate: true
+
+  storage:
+    size: 1Gi
+
+  replication:
+    enabled: true
+  replicas: 3
+
+  # NB: Remove "max_connections=10" in production
+  myCnf: |
+    [mariadb]
+    bind-address=0.0.0.0
+    log_bin
+    explicit_defaults_for_timestamp
+    skip-name-resolve
+    ignore_db_dirs=lost+found
+    max_allowed_packet=16M
+    character-set-server=UTF8
+    collation-server=utf8_general_ci
+    max_connections=10
+    rpl_semi_sync_master_timeout=60000
+
+  # metrics:
+  #   enabled: false
+
+  affinity:
+    antiAffinityEnabled: true

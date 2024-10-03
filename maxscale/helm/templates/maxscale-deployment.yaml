@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: {{ .Values.maxscale.maxscale_deployment_name }}
+ namespace: {{ .Values.maxscale.namespace }}
+
+ labels:
+   app: maxscale
+spec:
+ replicas: {{ .Values.maxscale.maxscale_replica_count }}
+ selector:
+   matchLabels:
+     app: maxscale
+ template:
+   metadata:
+     annotations:
+       checksum/configuration: {{ include (print $.Template.BasePath "/maxscale-config.yaml") . | sha256sum }}
+     labels:
+       app: maxscale
+   spec:
+     affinity:
+       podAntiAffinity:
+         requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - maxscale
+            topologyKey: kubernetes.io/hostname
+     containers:
+     - name: maxscale
+       image: mariadb/maxscale
+       ports:
+       - containerPort: 3306
+         name: maxscale-port
+       volumeMounts:
+       - name: maxscaleconfigmap
+         mountPath: /etc/maxscale.cnf
+         subPath: maxscale.cnf
+     - name: exporter
+       image: ghcr.io/vbezgachev/maxctrl_exporter:master-139af3
+       env:
+       - name: MAXSCALE_USERNAME
+         value: admin
+       - name: MAXSCALE_PASSWORD
+         value: mariadb
+       - name: MAXSCALE_EXPORTER_PORT
+         value: "9090"
+       ports:
+       - containerPort: 9090
+         name: metrics
+     tolerations:
+     - key: "node.kubernetes.io/unreachable"
+       operator: "Exists"
+       effect: "NoExecute"
+       tolerationSeconds: 10
+     - key: "node.kubernetes.io/not-ready"
+       operator: "Exists"
+       effect: "NoExecute"
+       tolerationSeconds: 10
+     volumes:
+     - name: maxscaleconfigmap
+       configMap:
+         name: {{ .Values.maxscale.maxscale_configmap_name }}

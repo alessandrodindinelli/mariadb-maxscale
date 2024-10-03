@@ -1,0 +1,215 @@
+mariadb:
+  initdbScripts:
+    maxscale.sql: |
+      CREATE USER 'ottuser'@'%' IDENTIFIED BY 'ottuserpwd';
+      GRANT ALL ON *.* TO 'ottuser'@'%' WITH GRANT OPTION;
+
+      CREATE USER 'maxscaleservice'@'%' IDENTIFIED BY 'servicepassword';
+      GRANT ALL ON *.* TO 'maxscaleservice'@'%' WITH GRANT OPTION;
+
+      CREATE USER 'maxscalemonitor'@'%' IDENTIFIED BY 'monitorpassword';
+      GRANT ALL ON *.* TO 'maxscalemonitor'@'%' WITH GRANT OPTION;
+  image:
+    registry: docker.io
+    repository: bitnami/mariadb
+    tag: 10.6.9-debian-11-r0
+    debug: true
+  architecture: replication
+  fullnameOverride: mariadb
+  prometheus:
+    obm-application: Infrastructure
+    warning-toc-instruction: "TOC - Send e-mail to the OTT ITA DL technology.ott.ita@skytv.it and to the Compression ITA DL technology.maintenance@skytv.it"
+    critical-toc-instruction: "TOC - Phone the on-call person and send an e-mail to the Compression ITA DL technology.maintenance@skytv.it"
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+      labels:
+        release: sky-promop
+      selector:
+        app.kubernetes.io/component: secondary
+  auth:
+    ## MySQL root password
+    ## ref: https://github.com/bitnami/bitnami-docker-mysql#setting-the-root-password-on-first-run
+    ##
+    rootPassword: "rootPWD"
+    ## MySQL custom user and database
+    ## ref: https://github.com/bitnami/bitnami-docker-mysql/blob/master/README.md#creating-a-database-on-first-run
+    ## ref: https://github.com/bitnami/bitnami-docker-mysql/blob/master/README.md#creating-a-database-user-on-first-run
+    ##
+    replicationPassword: "replicationPWD"
+    database: my_database
+    username: "dev"
+    password: "devPWD"
+  primary:
+    initContainers:
+      - name: set-serverid
+        image: bitnami/mariadb:10.6.9-debian-11-r0
+        command:
+          - bash
+          - "-c"
+          - |-
+            mkdir -p /bitnami/mariadb/addconf;  hostname|sed 's/^.*secondary-/1/;s/^.*primary-/2/;s/^/[mysqld]\nserver_id=/' > /bitnami/mariadb/addconf/serverid.cnf
+        volumeMounts:
+          - mountPath: /bitnami/mariadb
+            name: data
+            subPath: db-data
+    persistence:
+      size: 1Gi
+      subPath: db-data
+    ## Command and args for running the container (set to default if not set). Use array form
+    ##
+    command: []
+    args: []
+    ## Deployment pod host aliases
+    ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+    ##
+    hostAliases: []
+    ## Configure MySQL Primary with a custom my.cnf file
+    ## ref: https://mysql.com/kb/en/mysql/configuring-mysql-with-mycnf/#example-of-configuration-file
+    ##
+    configuration: |-
+      !include /bitnami/mariadb/addconf/serverid.cnf
+
+      [mysqld]
+      log-bin
+      skip-name-resolve
+      explicit_defaults_for_timestamp
+      basedir=/opt/bitnami/mariadb
+      plugin_dir=/opt/bitnami/mariadb/plugin
+      port=3306
+      socket=/opt/bitnami/mariadb/tmp/mysql.sock
+      tmpdir=/opt/bitnami/mariadb/tmp
+      max_allowed_packet=16M
+      bind-address=0.0.0.0
+      pid-file=/opt/bitnami/mariadb/tmp/mysqld.pid
+      log-error=/opt/bitnami/mariadb/logs/mysqld.log
+      character-set-server=UTF8
+      collation-server=utf8_general_ci
+      expire_logs_days=30
+      max_connections=10
+
+      [client]
+      port=3306
+      socket=/opt/bitnami/mariadb/tmp/mysql.sock
+      plugin_dir=/opt/bitnami/mariadb/plugin
+
+      [manager]
+      port=3306
+      socket=/opt/bitnami/mariadb/tmp/mysql.sock
+      pid-file=/opt/bitnami/mariadb/tmp/mysqld.pid
+    affinity:
+      podAntiAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchLabels:
+                app.kubernetes.io/name: mariadb
+                app.kubernetes.io/component: secondary
+            topologyKey: kubernetes.io/hostname
+  secondary:
+    initContainers:
+      - name: set-serverid
+        image: bitnami/mariadb:10.6.9-debian-11-r0
+        command:
+          - bash
+          - "-c"
+          - |-
+            mkdir -p /bitnami/mariadb/addconf;  hostname|sed 's/^.*secondary-/1/;s/^.*primary-/2/;s/^/[mysqld]\nserver_id=/' > /bitnami/mariadb/addconf/serverid.cnf
+        volumeMounts:
+          - mountPath: /bitnami/mariadb
+            name: data
+            subPath: db-data
+    persistence:
+      size: 1Gi
+      subPath: db-data
+    replicaCount: 1
+    affinity:
+      podAntiAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchLabels:
+                app.kubernetes.io/name: mariadb
+                app.kubernetes.io/component: primary
+            topologyKey: kubernetes.io/hostname
+    configuration: |-
+      !include /bitnami/mariadb/addconf/serverid.cnf
+      [mysqld]
+      skip-name-resolve
+      explicit_defaults_for_timestamp
+      basedir=/opt/bitnami/mariadb
+      port=3306
+      socket=/opt/bitnami/mariadb/tmp/mysql.sock
+      tmpdir=/opt/bitnami/mariadb/tmp
+      max_allowed_packet=16M
+      bind-address=0.0.0.0
+      pid-file=/opt/bitnami/mariadb/tmp/mysqld.pid
+      log-error=/opt/bitnami/mariadb/logs/mysqld.log
+      character-set-server=UTF8
+      collation-server=utf8_general_ci
+      slow_query_log=0
+      slow_query_log_file=/opt/bitnami/mariadb/logs/mysqld.log
+      long_query_time=10.0
+      expire_logs_days=30
+
+      [client]
+      port=3306
+      socket=/opt/bitnami/mariadb/tmp/mysql.sock
+
+      [manager]
+      port=3306
+      socket=/opt/bitnami/mariadb/tmp/mysql.sock
+      pid-file=/opt/bitnami/mariadb/tmp/mysqld.pid
+
+maxscale:
+  namespace: poc-mariadb-maxscale-helm
+
+  #The protocol which is going to be used to connect to servers
+  #Available options are, MariaDBClient maxscaled and MariaDBBackend
+  maxscale_server_protocol: MariaDBBackend
+
+  #Choose the monitoring modules
+  #The available options are, mariadbmon, clustrixmon, Columnstore
+  maxscale_monitor_module: mariadbmon
+
+  #Number of times to try to reconnect to a server before considering it down
+  maxscale_fail_count: 2
+
+  #To enable auto_failover set the value to 1. (0 would be for disabled)
+  maxscale_auto_failover: true
+
+  #To enable auto_rejoin for servers after a temporary down
+  maxscale_auto_rejoin: true
+
+  # This setting tells the monitor to assume that the servers should be arranged in a 1-master-N-slaves topology and the monitor should try to keep it that way
+  enforce_simple_topology: true
+
+  enforce_read_only_slaves: true
+
+  enable_root_user: true
+
+  router_options: master
+
+  #The number of seconds(ms) for maxscale to check on servers
+  maxscale_monitor_interval: 1000
+
+  maxscale_router_protocol: MariaDBProtocol
+
+  #Name of the deployment for maxscale
+  maxscale_deployment_name: maxscale-deployment
+
+  #Choose the number of replicas for Maxscale
+  maxscale_replica_count: 1
+
+  #The name of config map for maxscal
+  maxscale_configmap_name: maxscale-config
+
+  #The name of service for maxscale
+  maxscale_service_name: maxscale-service
+
+  #Monitor credentials
+  monitor_user: maxscalemonitor
+  monitor_password: monitorpassword
+
+  #Service credentials
+  service_user: maxscaleservice
+  service_password: servicepassword

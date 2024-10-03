@@ -1,0 +1,16 @@
+apiVersion: k8s.mariadb.com/v1alpha1
+kind: Grant
+metadata:
+  name: sky-admin-2
+  namespace: poc-mariadb-maxscale-external
+spec:
+  mariaDbRef:
+    name: mariadb-2
+  privileges:
+    - "*"
+  database: "*"
+  table: "*"
+  username: sky-admin
+  grantOption: false
+  host: "%"
+  retryInterval: 5s

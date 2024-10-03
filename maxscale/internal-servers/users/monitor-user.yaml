@@ -1,0 +1,16 @@
+apiVersion: k8s.mariadb.com/v1alpha1
+kind: User
+metadata:
+  name: maxscale-monitor
+  namespace: poc-mariadb-maxscale-internal
+spec:
+  name: maxscale-monitor
+  mariaDbRef:
+    name: mariadb
+  passwordSecretKeyRef:
+    name: maxscale-monitor
+    key: password
+  maxUserConnections: 20
+  host: "%"
+  retryInterval: 5s
+  requeueInterval: 60s

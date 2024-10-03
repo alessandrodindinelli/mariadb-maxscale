@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: mysql-app
+ namespace: poc-mariadb-maxscale-external
+ labels:
+   app: mysql-app
+spec:
+ replicas: 1
+ selector:
+   matchLabels:
+     app: mysql-app
+ template:
+   metadata:
+     labels:
+       app: mysql-app
+   spec:
+     containers:
+     - name: fakeclient
+       image: mysql
+       command:
+         - bash
+         - "-c"
+         - "sleep infinity"

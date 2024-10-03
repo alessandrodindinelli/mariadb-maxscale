@@ -1,0 +1,9 @@
+dependencies:
+- name: mariadb
+  repository: https://charts.bitnami.com/bitnami
+  version: 11.1.8
+- name: maxscale
+  repository: https://charts.appuio.ch
+  version: 2.0.1
+digest: sha256:58fd00351ebc04b53040faafd6fca52f9294f3cd0d9b65bbe74b0079db0db516
+generated: "2023-12-05T18:16:23.301563+01:00"

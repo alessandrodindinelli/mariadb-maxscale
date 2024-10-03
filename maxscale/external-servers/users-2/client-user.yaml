@@ -1,0 +1,16 @@
+apiVersion: k8s.mariadb.com/v1alpha1
+kind: User
+metadata:
+  name: maxscale-client-2
+  namespace: poc-mariadb-maxscale-external
+spec:
+  name: maxscale-client
+  mariaDbRef:
+    name: mariadb-2
+  passwordSecretKeyRef:
+    name: maxscale-client
+    key: password
+  maxUserConnections: 20
+  host: "%"
+  retryInterval: 5s
+  requeueInterval: 60s

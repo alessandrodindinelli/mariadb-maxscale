@@ -1,0 +1,20 @@
+apiVersion: k8s.mariadb.com/v1alpha1
+kind: Grant
+metadata:
+  name: maxscale-client-1
+  namespace: poc-mariadb-maxscale-external
+spec:
+  mariaDbRef:
+    name: mariadb-1
+  privileges:
+    - "SELECT"
+    - "INSERT"
+    - "UPDATE"
+    - "DELETE"
+  database: "*"
+  table: "*"
+  username: maxscale-client
+  grantOption: false
+  host: "%"
+  retryInterval: 5s
+  requeueInterval: 60s
