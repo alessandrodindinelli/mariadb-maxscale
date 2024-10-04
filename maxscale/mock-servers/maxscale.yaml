@@ -11,18 +11,15 @@ spec:
   # mariadb-$INDEX-0.mariadb-$INDEX-internal.$NAMESPACE.svc.cluster.local
   servers:
     - name: mariadb-0
-      address: 
-      # address: mariadb-0-0.mariadb-0-internal.poc-mariadb-maxscale-external.svc.cluster.local
+      address: mariadb-svc-0.poc-mariadb-maxscale-external.svc.cluster.local
       port: 3306
       protocol: MariaDBBackend
     - name: mariadb-1
-      address: 
-      # address: mariadb-1-0.mariadb-1-internal.poc-mariadb-maxscale-external.svc.cluster.local
+      address: mariadb-svc-1.poc-mariadb-maxscale-external.svc.cluster.local
       port: 3306
       protocol: MariaDBBackend
     - name: mariadb-2
-      address: 
-      # address: mariadb-2-0.mariadb-2-internal.poc-mariadb-maxscale-external.svc.cluster.local
+      address: mariadb-svc-2.poc-mariadb-maxscale-external.svc.cluster.local
       port: 3306
       protocol: MariaDBBackend
 
