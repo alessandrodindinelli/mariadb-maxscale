@@ -33,7 +33,7 @@ metadata:
     prometheus.io/port: "9104"
     prometheus.io/scrape: "true"
   name: mariadb-secondary-1
-  namespace: msm
+  namespace: {{ .Values.maxscale.namespace }}
 spec:
   clusterIP: None
   internalTrafficPolicy: Cluster
