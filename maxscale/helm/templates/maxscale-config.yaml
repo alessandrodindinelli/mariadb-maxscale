@@ -10,9 +10,6 @@ data:
     threads=auto
     admin_secure_gui=false
     admin_enabled=true
-    config_sync_cluster=monitor
-    config_sync_user=maxscalemonitor
-    config_sync_password=monitorpassword
 
     [primary0]
     type=server
@@ -26,14 +23,22 @@ data:
     port=3306
     protocol=MariaDBBackend
 
+    [secondary1]
+    type=server
+    address="mariadb-secondary-1"
+    port=3306
+    protocol=MariaDBBackend
+
     [monitor]
     type=monitor
     module={{ .Values.maxscale.maxscale_monitor_module }}
-    servers=primary0,secondary0
+    servers=primary0,secondary0,secondary1
     failcount={{ .Values.maxscale.maxscale_fail_count }}
     auto_failover={{ .Values.maxscale.maxscale_auto_failover }}
     auto_rejoin={{ .Values.maxscale.maxscale_auto_rejoin }}
     monitor_interval={{ .Values.maxscale.maxscale_monitor_interval }}ms
+    replication_user=replicator
+    replication_password={{ .Values.mariadb.auth.replicationPassword }}
     enforce_simple_topology={{ .Values.maxscale.enforce_simple_topology }}
     enforce_read_only_slaves={{ .Values.maxscale.enforce_read_only_slaves }}
     user={{ .Values.maxscale.monitor_user }}
@@ -42,7 +47,7 @@ data:
     [RW-service]
     type=service
     router=readconnroute
-    servers=primary0,secondary0
+    servers=primary0,secondary0,secondary1
     router_options: {{ .Values.maxscale.router_options }}
     user={{ .Values.maxscale.service_user }}
     password={{ .Values.maxscale.service_password }}

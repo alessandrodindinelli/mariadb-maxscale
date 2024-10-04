@@ -50,15 +50,6 @@ spec:
        ports:
        - containerPort: 9090
          name: metrics
-     tolerations:
-     - key: "node.kubernetes.io/unreachable"
-       operator: "Exists"
-       effect: "NoExecute"
-       tolerationSeconds: 10
-     - key: "node.kubernetes.io/not-ready"
-       operator: "Exists"
-       effect: "NoExecute"
-       tolerationSeconds: 10
      volumes:
      - name: maxscaleconfigmap
        configMap:
