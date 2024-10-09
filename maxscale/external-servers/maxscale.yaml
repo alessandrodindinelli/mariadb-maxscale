@@ -6,6 +6,9 @@ metadata:
 spec:
   image: mariadb/maxscale:24.02.2
   imagePullPolicy: IfNotPresent
+  
+  metrics:
+    enabled: true
 
   # mariadb-$INDEX-0.mariadb-$INDEX-internal.$NAMESPACE.svc.cluster.local
   servers:

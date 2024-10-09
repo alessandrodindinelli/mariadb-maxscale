@@ -46,9 +46,6 @@ metadata:
   namespace: poc-mariadb-maxscale-external
 data:
   init.sql: |
-      CREATE USER 'ottuser'@'%' IDENTIFIED BY 'ottuserpwd';
-      GRANT ALL ON *.* TO 'ottuser'@'%' WITH GRANT OPTION;
-
       CREATE USER 'maxscale-admin'@'%' IDENTIFIED BY 'ey%3UP^68NdKQV';
       GRANT ALL ON *.* TO 'maxscale-admin'@'%' WITH GRANT OPTION;
 

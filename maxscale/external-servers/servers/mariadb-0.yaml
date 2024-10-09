@@ -6,6 +6,9 @@ metadata:
 spec:
   image: mariadb:10.6.9
   imagePullPolicy: IfNotPresent
+  
+  metrics:
+    enabled: true
 
   rootPasswordSecretKeyRef:
     name: mariadb-root-user
