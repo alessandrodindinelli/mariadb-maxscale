@@ -4,8 +4,7 @@ metadata:
   name: maxscale
   namespace: poc-mariadb-maxscale-external
 spec:
-  image: mariadb/maxscale:24.02.2 # --> Target
-  # image: mariadb/maxscale:23.08.5
+  image: mariadb/maxscale:24.02.2
   imagePullPolicy: IfNotPresent
 
   # mariadb-$INDEX-0.mariadb-$INDEX-internal.$NAMESPACE.svc.cluster.local

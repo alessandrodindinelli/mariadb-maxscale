@@ -18,14 +18,16 @@ export FOLDER_PATH="/Users/alessandro/skytv/projects/mariadb"
 echo "Applying manifests 👷\n"
 
 kubectl apply -f $FOLDER_PATH/mariadb-operator/maxscale/mock-servers/user-secrets.yaml
+sleep 1
 kubectl apply -f $FOLDER_PATH/mariadb-operator/maxscale/mock-servers/configmaps/
 sleep 3
 kubectl apply -f $FOLDER_PATH/mariadb-operator/maxscale/mock-servers/servers/
+sleep 1
 kubectl apply -f $FOLDER_PATH/mariadb-operator/maxscale/mock-servers/app-deployment.yaml
 sleep 10
 kubectl apply -f $FOLDER_PATH/mariadb-operator/maxscale/mock-servers/maxscale.yaml
 
-echo "\nUse the following password for \"maxscale-admin\" in the GUI ⚠️\n"
+echo "\nUse the following password for \"maxscale-admin\" in the GUI 🖥️\n"
 kubectl get secret maxscale-admin -n poc-mariadb-maxscale-external --template={{.data.password}} | base64 -d
 
 echo "\n\nInstallation complete ✅\n"

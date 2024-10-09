@@ -16,6 +16,7 @@ sleep 90
 export FOLDER_PATH="/Users/alessandro/skytv/projects/mariadb"
 
 echo "Applying manifests 👷\n"
+
 kubectl apply -f $FOLDER_PATH/mariadb-operator/maxscale/external-servers/user-secrets.yaml
 sleep 1
 for INDEX in 0 1 2; do kubectl apply -f $FOLDER_PATH/mariadb-operator/maxscale/external-servers/users-$INDEX/; done
@@ -26,7 +27,7 @@ kubectl apply -f $FOLDER_PATH/mariadb-operator/maxscale/external-servers/maxscal
 sleep 1
 kubectl apply -f $FOLDER_PATH/mariadb-operator/maxscale/external-servers/app-deployment.yaml
 sleep 3
-echo "\nUse the following password for \"maxscale-admin\" in the GUI ⚠️\n"
+echo "\nUse the following password for \"maxscale-admin\" in the GUI 🖥️\n"
 kubectl get secret maxscale-admin -n poc-mariadb-maxscale-external --template={{.data.password}} | base64 -d
 
 echo "\n\nInstallation complete ✅\n"

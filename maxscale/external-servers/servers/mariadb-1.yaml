@@ -53,7 +53,8 @@ spec:
     slow_query_log_file = /var/log/mysql/mysql_slow.log
     long_query_time = 3
     default_time_zone='+00:00'
-    max_connections=1000
+    max_connections=10
+    connect_timeout=600
     max_statement_time=120
     wait_timeout=600
     performance_schema=ON
@@ -72,3 +73,5 @@ spec:
 
     [mysqld_safe]
     log_error = /var/log/mysql/mysql_error.log
+# max_connections era 1000
+# connect_timeout non c'era
