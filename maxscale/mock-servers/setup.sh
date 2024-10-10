@@ -31,3 +31,5 @@ echo "\nUse the following password for \"maxscale-admin\" in the GUI 🖥️\n"
 kubectl get secret maxscale-admin -n poc-mariadb-maxscale-external --template={{.data.password}} | base64 -d
 
 echo "\n\nInstallation complete ✅\n"
+
+# helm upgrade -f $HOME/skytv/projects/mariadb/mariadb-operator/prometheus-values.yaml prometheus prometheus-community/kube-prometheus-stack -n monitoring

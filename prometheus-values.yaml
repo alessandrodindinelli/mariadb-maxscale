@@ -1,0 +1,7 @@
+prometheus:
+  prometheusSpec:
+    podMonitorSelectorNilUsesHelmValues: false
+    serviceMonitorSelectorNilUsesHelmValues: false
+    podMonitorSelector:
+      matchLabels:
+        app.kubernetes.io/name: maxscale

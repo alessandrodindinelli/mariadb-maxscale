@@ -1,0 +1,17 @@
+# https://medium.com/@joudwawad/comprehensive-beginners-guide-to-kube-prometheus-in-kubernetes-monitoring-alerts-integration-4ade4fa8fa8c
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: maxscale-monitor
+  namespace: monitoring
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: maxscale
+  podMetricsEndpoints:
+  - port: metrics 
+    path: /metrics
+    interval: 5s  
+  namespaceSelector:
+    matchNames:
+    - poc-mariadb-maxscale-external
