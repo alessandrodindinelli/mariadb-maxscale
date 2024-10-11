@@ -1,10 +1,10 @@
 # Values to override the Prometheus Operator installation
 # Ale: helm upgrade -f $HOME/skytv/projects/mariadb/mariadb-operator/prometheus-values.yaml prometheus prometheus-community/kube-prometheus-stack -n monitoring
 # Edo: helm upgrade -f $DIR_PATH/mariadb-operator/prometheus-values.yaml prometheus prometheus-community/kube-prometheus-stack -n monitoring
-prometheus:
-  prometheusSpec:
-    podMonitorSelectorNilUsesHelmValues: false
-    serviceMonitorSelectorNilUsesHelmValues: false
-    podMonitorSelector:
-      matchLabels:
-        app.kubernetes.io/name: maxscale
+# prometheus:
+#   prometheusSpec:
+#     podMonitorSelectorNilUsesHelmValues: false
+#     serviceMonitorSelectorNilUsesHelmValues: false
+#     podMonitorSelector:
+#       matchLabels:
+#         app.kubernetes.io/name: maxscale

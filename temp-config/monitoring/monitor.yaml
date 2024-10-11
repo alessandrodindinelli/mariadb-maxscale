@@ -9,8 +9,24 @@ spec:
     matchLabels:
       app.kubernetes.io/name: maxscale
   podMetricsEndpoints:
-  - port: "9105" 
+  - port: metrics 
     path: /metrics
   namespaceSelector:
     matchNames:
     - poc-mariadb-maxscale-external
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: maxscale-monitor
+  namespace: monitoring
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: maxscale
+  endpoints:
+    - port: metrics
+      path: /metrics
+  namespaceSelector:
+    matchNames:
+      - poc-mariadb-maxscale-external

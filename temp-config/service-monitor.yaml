@@ -1,0 +1,48 @@
+# k get servicemonitor maxscale-metrics -n poc-mariadb-maxscale-external -o yaml
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  creationTimestamp: "2024-10-11T10:09:40Z"
+  generation: 1
+  labels:
+    release: kube-prometheus-stack
+  name: maxscale-metrics
+  namespace: poc-mariadb-maxscale-external
+  ownerReferences:
+  - apiVersion: k8s.mariadb.com/v1alpha1
+    blockOwnerDeletion: true
+    controller: true
+    kind: MaxScale
+    name: maxscale
+    uid: 8789dd15-acd2-4640-9424-b0b883f1db32
+  resourceVersion: "1787"
+  uid: df8d34af-a2aa-461c-93fd-711fe427ec3e
+spec:
+  endpoints:
+  - interval: 10s
+    metricRelabelings:
+    - action: replace
+      replacement: maxscale-0.maxscale-internal.poc-mariadb-maxscale-external.svc.cluster.local
+      sourceLabels:
+      - instance
+      targetLabel: instance
+    - action: replace
+      replacement: maxscale-0
+      sourceLabels:
+      - target
+      targetLabel: target
+    params:
+      target:
+      - maxscale-0.maxscale-internal.poc-mariadb-maxscale-external.svc.cluster.local:8989
+    path: /probe
+    port: metrics
+    scheme: http
+    scrapeTimeout: 10s
+  jobLabel: maxscale-monitoring
+  namespaceSelector:
+    matchNames:
+    - poc-mariadb-maxscale-external
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: maxscale-metrics
+      app.kubernetes.io/name: exporter

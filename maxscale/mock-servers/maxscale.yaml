@@ -6,9 +6,17 @@ metadata:
 spec:
   image: mariadb/maxscale:24.02.2
   imagePullPolicy: IfNotPresent
-  
+
   metrics:
     enabled: true
+    exporter:
+      image: mariadb/maxscale-prometheus-exporter-ubi:v0.0.1
+      port: 9105
+    serviceMonitor:
+      prometheusRelease: prometheus
+      jobLabel: maxscale-monitoring
+      interval: 10s
+      scrapeTimeout: "10"
 
   # mariadb-$INDEX-0.mariadb-$INDEX-internal.$NAMESPACE.svc.cluster.local
   servers:
