@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "\nInstalling Prometheus Operator 👷\n"
-helm install prometheus prometheus-community/kube-prometheus-stack -n monitoring --create-namespace
+helm install  -f $HOME/skytv/projects/mariadb/mariadb-operator/prometheus-values.yaml prometheus prometheus-community/kube-prometheus-stack -n monitoring --create-namespace
 sleep 3
 echo "\nInstalling MariaDB Operator 👷\n"
 helm install mariadb-operator-crds mariadb-operator/mariadb-operator-crds -n poc-mariadb-maxscale-external --create-namespace
@@ -26,10 +26,15 @@ sleep 1
 kubectl apply -f $FOLDER_PATH/mariadb-operator/maxscale/mock-servers/app-deployment.yaml
 sleep 10
 kubectl apply -f $FOLDER_PATH/mariadb-operator/maxscale/mock-servers/maxscale.yaml
+sleep 3
 
 echo "\nUse the following password for \"maxscale-admin\" in the GUI 🖥️\n"
 kubectl get secret maxscale-admin -n poc-mariadb-maxscale-external --template={{.data.password}} | base64 -d
 
 echo "\n\nInstallation complete ✅\n"
 
+# NB: da usare se in caso non si passi il values.yaml all'installazione
 # helm upgrade -f $HOME/skytv/projects/mariadb/mariadb-operator/prometheus-values.yaml prometheus prometheus-community/kube-prometheus-stack -n monitoring
+
+# NB: custom resource PodMonitor
+# k apply -f $FOLDER_PATH/mariadb-operator/maxscale/mock-servers/monitoring/

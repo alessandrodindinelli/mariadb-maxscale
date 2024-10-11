@@ -9,9 +9,8 @@ spec:
     matchLabels:
       app.kubernetes.io/name: maxscale
   podMetricsEndpoints:
-  - port: metrics 
+  - port: "9105" 
     path: /metrics
-    interval: 5s  
   namespaceSelector:
     matchNames:
     - poc-mariadb-maxscale-external
