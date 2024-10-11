@@ -1,25 +1,26 @@
+# k get pod maxscale-metrics-$POD_ID -n poc-mariadb-maxscale-external -o yaml
 apiVersion: v1
 kind: Pod
 metadata:
   annotations:
-    k8s.mariadb.com/config: 7e2b668a32e9518833df139b77b08db8caafcb5d316f5937d5a6789f727df373
-  creationTimestamp: "2024-10-10T14:12:10Z"
-  generateName: maxscale-metrics-6465779c5-
+    k8s.mariadb.com/config: 105128cd886fef58dcd8e8d5c296e240c75958297aaaff197dfd84e922ccfa2f
+  creationTimestamp: "2024-10-11T06:45:55Z"
+  generateName: maxscale-metrics-65ddffb468-
   labels:
     app.kubernetes.io/instance: maxscale-metrics
     app.kubernetes.io/name: exporter
-    pod-template-hash: 6465779c5
-  name: maxscale-metrics-6465779c5-wbzgm
+    pod-template-hash: 65ddffb468
+  name: maxscale-metrics-65ddffb468-prmkw
   namespace: poc-mariadb-maxscale-external
   ownerReferences:
   - apiVersion: apps/v1
     blockOwnerDeletion: true
     controller: true
     kind: ReplicaSet
-    name: maxscale-metrics-6465779c5
-    uid: 185bd5ea-d562-47f4-8598-e8e7dd2d3bf0
-  resourceVersion: "3407"
-  uid: 38dfd93b-ca12-4ea8-b504-0a2c705f0eb7
+    name: maxscale-metrics-65ddffb468
+    uid: 5b8ec8e0-54f5-44d4-9f56-8295c4c2790e
+  resourceVersion: "1827"
+  uid: 9ac18229-9428-460a-8259-3a33c8d84132
 spec:
   affinity: {}
   containers:
@@ -58,7 +59,7 @@ spec:
       name: config
       readOnly: true
     - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
-      name: kube-api-access-g74hb
+      name: kube-api-access-wx9kc
       readOnly: true
   dnsPolicy: ClusterFirst
   enableServiceLinks: true
@@ -85,7 +86,7 @@ spec:
     secret:
       defaultMode: 420
       secretName: maxscale-metrics-config
-  - name: kube-api-access-g74hb
+  - name: kube-api-access-wx9kc
     projected:
       defaultMode: 420
       sources:
@@ -106,23 +107,23 @@ spec:
 status:
   conditions:
   - lastProbeTime: null
-    lastTransitionTime: "2024-10-10T14:12:10Z"
+    lastTransitionTime: "2024-10-11T06:45:55Z"
     status: "True"
     type: Initialized
   - lastProbeTime: null
-    lastTransitionTime: "2024-10-10T14:12:17Z"
+    lastTransitionTime: "2024-10-11T06:46:03Z"
     status: "True"
     type: Ready
   - lastProbeTime: null
-    lastTransitionTime: "2024-10-10T14:12:17Z"
+    lastTransitionTime: "2024-10-11T06:46:03Z"
     status: "True"
     type: ContainersReady
   - lastProbeTime: null
-    lastTransitionTime: "2024-10-10T14:12:10Z"
+    lastTransitionTime: "2024-10-11T06:45:55Z"
     status: "True"
     type: PodScheduled
   containerStatuses:
-  - containerID: containerd://79a1cefb761e4ea436ac2d49e8bb3023bbbe05d74abd5dacb8f580072f3938d8
+  - containerID: containerd://1a8837d2bfbf6e1e7ef371f00cc19344083bf1c9b77d2037c6270a923fe7f1f3
     image: docker-registry2.mariadb.com/mariadb/maxscale-prometheus-exporter-ubi:v0.0.1
     imageID: docker-registry2.mariadb.com/mariadb/maxscale-prometheus-exporter-ubi@sha256:9312d49ce245feebba5cc2788a0e5c8b6982f9f6eefe02c24b0901592274ef9f
     lastState: {}
@@ -132,11 +133,11 @@ status:
     started: true
     state:
       running:
-        startedAt: "2024-10-10T14:12:16Z"
+        startedAt: "2024-10-11T06:46:02Z"
   hostIP: 172.18.0.5
   phase: Running
-  podIP: 10.42.2.9
+  podIP: 10.42.2.8
   podIPs:
-  - ip: 10.42.2.9
+  - ip: 10.42.2.8
   qosClass: BestEffort
-  startTime: "2024-10-10T14:12:10Z"
+  startTime: "2024-10-11T06:45:55Z"
