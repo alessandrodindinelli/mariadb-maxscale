@@ -2,7 +2,7 @@
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  creationTimestamp: "2024-10-14T07:08:02Z"
+  creationTimestamp: "2024-10-14T12:15:28Z"
   generation: 1
   labels:
     release: prometheus
@@ -14,9 +14,9 @@ metadata:
     controller: true
     kind: MaxScale
     name: maxscale
-    uid: 7bf4135b-a055-4815-a702-fbdefa29f2d2
-  resourceVersion: "2030"
-  uid: bec9d15b-fd6b-451d-bfaa-c63afc85864f
+    uid: 73af1754-c431-496a-9d3e-3f751339b6ac
+  resourceVersion: "2090"
+  uid: 755c5cb4-d454-4d61-b5e0-2ea78901a344
 spec:
   endpoints:
   - metricRelabelings:

@@ -15,4 +15,5 @@ resources:
 - ./maxscale.yaml
 
 # NB:
-# mariadb-cnf-XX.yaml & mariadb-server-XX.yaml will be used just for testing purposes
+# mariadb-cnf-XX.yaml & mariadb-server-XX.yaml are just for testing purposes
+# but the users should be created in the final servers too
