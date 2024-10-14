@@ -1,0 +1,65 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mariadb-cnf-1
+  namespace: poc-mariadb-maxscale-external
+data:
+  my.cnf: |
+    [mysqld]
+    server-id=2
+    log_bin=mysqld-bin
+    log-slave-updates
+    general_log = on
+    general_log_file = /var/log/mysql/mysql.log
+    log_error = /var/log/mysql/mysql_error.log
+    slow_query_log = on
+    slow_query_log_file = /var/log/mysql/mysql_slow.log
+    long_query_time = 3
+    default_time_zone='+00:00'
+    max_connections=10
+    connect_timeout=600
+    max_statement_time=120
+    wait_timeout=600
+    performance_schema=ON
+    max_digest_length=4096
+    performance_schema_max_digest_length=4096
+    performance_schema_max_sql_text_length=4096
+    performance-schema-consumer-events-statements-current=ON
+    performance-schema-consumer-events-waits-current=ON
+    performance-schema-consumer-events-statements-history-long=ON
+    performance-schema-consumer-events-statements-history=ON
+    explicit_defaults_for_timestamp='ON'
+    collation_server=utf8_general_ci
+    init_connect=''
+    character_set_server=utf8
+    sql_mode=STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION
+
+    [mysqld_safe]
+    log_error = /var/log/mysql/mysql_error.log
+# max_connections era 1000
+# connect_timeout non c'era
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mariadb-initdb-1
+  namespace: poc-mariadb-maxscale-external
+data:
+  init.sql: |
+      CREATE USER 'maxscale-admin'@'%' IDENTIFIED BY 'ey%3UP^68NdKQV';
+      GRANT ALL ON *.* TO 'maxscale-admin'@'%' WITH GRANT OPTION;
+
+      CREATE USER 'maxscale-client'@'%' IDENTIFIED BY 'oy&iX*G4&m8#xv';
+      GRANT ALL ON *.* TO 'maxscale-client'@'%' WITH GRANT OPTION;
+
+      CREATE USER 'maxscale-monitor'@'%' IDENTIFIED BY 'KB8*&NCf8hR#Wu';
+      GRANT ALL ON *.* TO 'maxscale-monitor'@'%' WITH GRANT OPTION;
+
+      CREATE USER 'maxscale-server'@'%' IDENTIFIED BY 'Pi$9pzCn@fiT8Z';
+      GRANT ALL ON *.* TO 'maxscale-server'@'%' WITH GRANT OPTION;
+
+      CREATE USER 'maxscale-sync'@'%' IDENTIFIED BY 'Uw7#N$TrXVz35s';
+      GRANT ALL ON *.* TO 'maxscale-sync'@'%' WITH GRANT OPTION;
+
+      CREATE USER 'sky-admin'@'%' IDENTIFIED BY 'yD9Xg$Ryce^6f2';
+      GRANT ALL ON *.* TO 'sky-admin'@'%' WITH GRANT OPTION;

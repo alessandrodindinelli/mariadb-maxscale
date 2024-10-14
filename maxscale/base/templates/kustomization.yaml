@@ -1,0 +1,18 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+# credentials for maxscale users
+- ./user-secrets.yaml
+# servers configuration and init script for user creations
+- ./mariadb-cnf-0.yaml
+- ./mariadb-cnf-1.yaml
+- ./mariadb-cnf-2.yaml
+# mariadb servers and services
+- ./mariadb-server-0.yaml
+- ./mariadb-server-1.yaml
+- ./mariadb-server-2.yaml
+# maxscale
+- ./maxscale.yaml
+
+# NB:
+# mariadb-cnf-XX.yaml & mariadb-server-XX.yaml will be used just for testing purposes

@@ -2,10 +2,10 @@
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  creationTimestamp: "2024-10-11T10:09:40Z"
+  creationTimestamp: "2024-10-14T07:08:02Z"
   generation: 1
   labels:
-    release: kube-prometheus-stack
+    release: prometheus
   name: maxscale-metrics
   namespace: poc-mariadb-maxscale-external
   ownerReferences:
@@ -14,13 +14,12 @@ metadata:
     controller: true
     kind: MaxScale
     name: maxscale
-    uid: 8789dd15-acd2-4640-9424-b0b883f1db32
-  resourceVersion: "1787"
-  uid: df8d34af-a2aa-461c-93fd-711fe427ec3e
+    uid: 7bf4135b-a055-4815-a702-fbdefa29f2d2
+  resourceVersion: "2030"
+  uid: bec9d15b-fd6b-451d-bfaa-c63afc85864f
 spec:
   endpoints:
-  - interval: 10s
-    metricRelabelings:
+  - metricRelabelings:
     - action: replace
       replacement: maxscale-0.maxscale-internal.poc-mariadb-maxscale-external.svc.cluster.local
       sourceLabels:
@@ -37,8 +36,6 @@ spec:
     path: /probe
     port: metrics
     scheme: http
-    scrapeTimeout: 10s
-  jobLabel: maxscale-monitoring
   namespaceSelector:
     matchNames:
     - poc-mariadb-maxscale-external

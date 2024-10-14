@@ -32,9 +32,3 @@ echo "\nUse the following password for \"maxscale-admin\" in the GUI 🖥️\n"
 kubectl get secret maxscale-admin -n poc-mariadb-maxscale-external --template={{.data.password}} | base64 -d
 
 echo "\n\nInstallation complete ✅\n"
-
-# NB: da usare se in caso non si passi il values.yaml all'installazione
-# helm upgrade -f -f $FOLDER_PATH/mariadb-operator/prometheus-values.yaml prometheus prometheus-community/kube-prometheus-stack -n monitoring
-
-# NB: custom resource PodMonitor
-# k apply -f $FOLDER_PATH/mariadb-operator/maxscale/mock-servers/monitoring/
