@@ -31,6 +31,7 @@ spec:
         router_options: "master"
         max_replication_lag: "3s"
         enable_root_user: "true"
+        max_connections: "1000"
       listener:
         port: 3306
         protocol: MariaDBProtocol
