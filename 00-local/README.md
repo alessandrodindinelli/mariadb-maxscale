@@ -39,3 +39,7 @@ sh setup-$NAME.sh
     - <http://localhost:8989>
       - maxscale-admin
       - ey%3UP^68NdKQV
+
+## Notes
+
+- The server "mariadb-0" has in it's configuration the parameter `max_connections=10` to be able to test the failover of the server.

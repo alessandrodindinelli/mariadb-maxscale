@@ -12,8 +12,8 @@
 DB_NAME="poc_maxscale"
 DB_USER="sky-admin"
 DB_PASSWORD="yD9Xg\$Ryce^6f2"
-# DB_HOST="mariadb-svc-0"
-DB_HOST="maxscale"
+DB_HOST="mariadb-svc-0"
+# DB_HOST="maxscale"
 DB_PORT="3306"
 
 # Test parameters
