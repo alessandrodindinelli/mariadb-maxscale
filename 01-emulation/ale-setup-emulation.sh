@@ -10,7 +10,7 @@ sleep 90
 
 echo "Applying manifests 👷\n"
 
-kubectl apply -k /Users/alessandro/skytv/projects/mariadb/mariadb-operator/01-emulation/
+kubectl apply -k /Users/alessandro/skytv/projects/mariadb/mariadb-operator/01-emulation/ -n poc-maxscale
 sleep 5
 
 echo "\nUse the following password for \"maxscale-admin\" in the GUI 🖥️\n"

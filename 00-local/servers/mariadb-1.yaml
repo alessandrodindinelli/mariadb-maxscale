@@ -1,4 +1,4 @@
-# NB: this is a simplified version of a MariaDB installation, it' meant for testing purposes
+# NB: this is a simplified version of a MariaDB installation, it's meant for testing purposes
 apiVersion: apps/v1
 kind: Deployment
 metadata:
