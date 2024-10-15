@@ -1,0 +1,96 @@
+apiVersion: k8s.mariadb.com/v1alpha1
+kind: MaxScale
+metadata:
+  name: maxscale
+  namespace: poc-maxscale
+spec:
+  image: mariadb/maxscale:24.02.2
+  imagePullPolicy: IfNotPresent
+
+  metrics:
+    enabled: true
+    serviceMonitor:
+      prometheusRelease: prometheus
+
+  # mariadb-$INDEX-0.mariadb-$INDEX-internal.$NAMESPACE.svc.cluster.local
+  servers:
+    - name: mariadb-0
+      address: mariadb-svc-0.poc-maxscale.svc.cluster.local
+      port: 3306
+      protocol: MariaDBBackend
+    - name: mariadb-1
+      address: mariadb-svc-1.poc-maxscale.svc.cluster.local
+      port: 3306
+      protocol: MariaDBBackend
+
+  services:
+    - name: mx-router
+      router: readconnroute
+      params:
+        router_options: "master"
+        master_accept_reads: "true"
+        max_replication_lag: "3s"
+        enable_root_user: "true"
+      listener:
+        port: 3306
+        protocol: MariaDBProtocol
+
+  # NB: rimosso "cooperative_monitoring_locks: majority_of_running" per evitare che riempia i log con questi messaggi:
+  # notice : [mariadbmon] 'mx-monitor' acquired the exclusive lock on a majority of its servers. Configured automatic cluster manipulation operations (e.g. failover) can be performed in 1 monitor ticks.
+  # https://jira.mariadb.org/browse/MXS-5145
+  monitor:
+    name: mx-monitor
+    module: mariadbmon
+    interval: 1s
+    params:
+      auto_failover: "true"
+      auto_rejoin: "true"
+      enforce_simple_topology: "true"
+      enforce_read_only_slaves: "true"
+      failcount: "1"
+
+  podSecurityContext:
+    fsGroup: 995
+    runAsUser: 0
+
+  admin:
+    port: 8989
+    guiEnabled: true
+
+  auth:
+    generate: false
+    adminUsername: maxscale-admin
+    adminPasswordSecretKeyRef:
+      name: maxscale-admin
+      key: password
+    deleteDefaultAdmin: true
+    clientUsername: maxscale-client
+    clientPasswordSecretKeyRef:
+      name: maxscale-client
+      key: password
+    clientMaxConnections: 90
+    serverUsername: maxscale-server
+    serverPasswordSecretKeyRef:
+      name: maxscale-server
+      key: password
+    serverMaxConnections: 90
+    monitorUsername: maxscale-monitor
+    monitorPasswordSecretKeyRef:
+      name: maxscale-monitor
+      key: password
+    monitorMaxConnections: 90
+    syncUsername: maxscale-sync
+    syncPasswordSecretKeyRef:
+      name: maxscale-sync
+      key: password
+    syncMaxConnections: 90
+
+  livenessProbe:
+    initialDelaySeconds: 20
+    periodSeconds: 30
+    timeoutSeconds: 5
+
+  readinessProbe:
+    initialDelaySeconds: 20
+    periodSeconds: 30
+    timeoutSeconds: 5

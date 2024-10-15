@@ -1,9 +1,0 @@
-apiVersion: v2
-name: sky-maria-aio
-description: proposal for mariadb maxscale
-type: application
-version: 0.2.1
-dependencies:
-- name: mariadb
-  version: "11.1.8"
-  repository: "https://charts.bitnami.com/bitnami"
