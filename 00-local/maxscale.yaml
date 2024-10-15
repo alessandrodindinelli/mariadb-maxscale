@@ -23,15 +23,28 @@ spec:
       port: 3306
       protocol: MariaDBBackend
 
-  # https://mariadb.com/kb/en/mariadb-maxscale-2208-readconnroute/#configuration
+  # https://mariadb.com/kb/en/mariadb-maxscale-24-readconnroute/
+  # services:
+  #   - name: mx-router
+  #     router: readconnroute
+  #     params:
+  #       router_options: "master"
+  #       max_replication_lag: "3s"
+  #       enable_root_user: "true"
+  #       max_connections: "1000"
+  #     listener:
+  #       port: 3306
+  #       protocol: MariaDBProtocol
+
+  # https://mariadb.com/kb/en/mariadb-maxscale-24-readwritesplit/
   services:
     - name: mx-router
-      router: readconnroute
+      router: readwritesplit
       params:
-        router_options: "master"
-        max_replication_lag: "3s"
         enable_root_user: "true"
-        max_connections: "1000"
+        max_slave_connections: "0"
+        master_failure_mode: "fail_instantly"
+        master_accept_reads: "true"
       listener:
         port: 3306
         protocol: MariaDBProtocol
@@ -44,7 +57,6 @@ spec:
       auto_failover: "true"
       auto_rejoin: "true"
       enforce_simple_topology: "true"
-      enforce_read_only_slaves: "true"
       failcount: "1"
 
   podSecurityContext:

@@ -2,23 +2,32 @@
 
 # Prerequisites
 # ---
+# k exec -tin poc-mariadb-maxscale-external mariadb-app-$POD_ID -- /bin/bash
+#
+# apt update && apt upgrade -y
+# apt install nano
+# nano test-ddos.sh
+# chmod +x test-ddos.sh
+#
 # mariadb -hmaxscale -uroot -pPassword1!
 # CREATE DATABASE poc_maxscale;
 # USE poc_maxscale;
 # CREATE TABLE t (a int);
+#
+# bash test-ddos.sh
 # ---
 
 # Database connection parameters, enable the needed DB_HOST
 DB_NAME="poc_maxscale"
 DB_USER="sky-admin"
 DB_PASSWORD="yD9Xg\$Ryce^6f2"
-DB_HOST="mariadb-svc-0"
-# DB_HOST="maxscale"
+# DB_HOST="mariadb-svc-0"
+DB_HOST="maxscale"
 DB_PORT="3306"
 
 # Test parameters
 DURATION=120  # Duration in seconds
-MAX_CONCURRENT=20  # Maximum number of concurrent queries
+MAX_CONCURRENT=100  # Maximum number of concurrent queries
 
 echo "Started execution script ..."
 
