@@ -12,7 +12,6 @@ spec:
     serviceMonitor:
       prometheusRelease: prometheus
 
-  # mariadb-$INDEX-0.mariadb-$INDEX-internal.$NAMESPACE.svc.cluster.local
   servers:
     - name: mariadb-0
       address: mariadb-svc-0.poc-maxscale.svc.cluster.local

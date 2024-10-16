@@ -12,7 +12,6 @@ spec:
     serviceMonitor:
       prometheusRelease: prometheus
 
-  # mariadb-$INDEX-0.mariadb-$INDEX-internal.$NAMESPACE.svc.cluster.local
   servers:
     - name: mariadb-0
       address: mariadb-svc-0.poc-mariadb-maxscale-external.svc.cluster.local
@@ -24,30 +23,30 @@ spec:
       protocol: MariaDBBackend
 
   # https://mariadb.com/kb/en/mariadb-maxscale-24-readconnroute/
-  # services:
-  #   - name: mx-router
-  #     router: readconnroute
-  #     params:
-  #       router_options: "master"
-  #       max_replication_lag: "3s"
-  #       enable_root_user: "true"
-  #       max_connections: "1000"
-  #     listener:
-  #       port: 3306
-  #       protocol: MariaDBProtocol
-
-  # https://mariadb.com/kb/en/mariadb-maxscale-24-readwritesplit/
   services:
     - name: mx-router
-      router: readwritesplit
+      router: readconnroute
       params:
+        router_options: "master"
+        max_replication_lag: "3s"
         enable_root_user: "true"
-        max_slave_connections: "0"
-        master_failure_mode: "fail_instantly"
-        master_accept_reads: "true"
+        max_connections: "1000"
       listener:
         port: 3306
         protocol: MariaDBProtocol
+
+  # https://mariadb.com/kb/en/mariadb-maxscale-24-readwritesplit/
+  # services:
+  #   - name: mx-router
+  #     router: readwritesplit
+  #     params:
+  #       enable_root_user: "true"
+  #       max_slave_connections: "0"
+  #       master_failure_mode: "fail_instantly"
+  #       master_accept_reads: "true"
+  #     listener:
+  #       port: 3306
+  #       protocol: MariaDBProtocol
 
   monitor:
     name: mx-monitor

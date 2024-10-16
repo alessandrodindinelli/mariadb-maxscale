@@ -36,7 +36,6 @@ data:
     [mysqld_safe]
     log_error = /var/log/mysql/mysql_error.log
 # max_connections era 1000
-# connect_timeout non c'era
 ---
 apiVersion: v1
 kind: ConfigMap
