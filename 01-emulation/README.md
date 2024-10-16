@@ -26,14 +26,9 @@ In the cluster you're planning on deploying the Maxscale solution, there should 
 
 ## Deploy
 
-- Use one of the following approaches to deploy all files to deploy all of the files:
+- Use the following approach to deploy all files:
   - manual with Kustomize
-    - `helm install mariadb-operator-crds mariadb-operator/mariadb-operator-crds -n poc-maxscale --create-namespace`
-    - `helm install mariadb-operator mariadb-operator/mariadb-operator -n poc-maxscale`
     - `kubectl apply -k $PATH/01-emulation/`
-  - script Bash
-    - `chmod +x $NAME-setup-emulation.sh`
-    - `sh $NAME-setup-emulation.sh`
 
 ## Notes
 
