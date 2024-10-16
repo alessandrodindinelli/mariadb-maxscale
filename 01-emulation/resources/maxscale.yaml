@@ -10,7 +10,7 @@ spec:
   metrics:
     enabled: true
     serviceMonitor:
-      prometheusRelease: prometheus
+      prometheusRelease: sky-promop
 
   servers:
     - name: mariadb-0
