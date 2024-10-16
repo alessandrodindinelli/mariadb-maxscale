@@ -22,7 +22,7 @@ spec:
       port: 3306
       protocol: MariaDBBackend
 
-  # https://mariadb.com/kb/en/mariadb-maxscale-2208-readconnroute/#configuration
+  # https://mariadb.com/kb/en/mariadb-maxscale-24-readconnroute/
   services:
     - name: mx-router
       router: readconnroute
@@ -34,6 +34,19 @@ spec:
       listener:
         port: 3306
         protocol: MariaDBProtocol
+
+  # https://mariadb.com/kb/en/mariadb-maxscale-24-readwritesplit/
+  # services:
+  #   - name: mx-router
+  #     router: readwritesplit
+  #     params:
+  #       enable_root_user: "true"
+  #       max_slave_connections: "0"
+  #       master_failure_mode: "fail_instantly"
+  #       master_accept_reads: "true"
+  #     listener:
+  #       port: 3306
+  #       protocol: MariaDBProtocol
 
   monitor:
     name: mx-monitor

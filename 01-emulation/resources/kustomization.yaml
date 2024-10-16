@@ -4,11 +4,9 @@ resources:
 # servers configuration and init script for user creations
 - ./mariadb-cnf-0.yaml
 - ./mariadb-cnf-1.yaml
-- ./mariadb-cnf-2.yaml
 # mariadb servers and services
 - ./mariadb-server-0.yaml
 - ./mariadb-server-1.yaml
-- ./mariadb-server-2.yaml
 # maxscale
 - ./maxscale.yaml
 
